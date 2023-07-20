@@ -21,7 +21,7 @@ $(function () {
     infinite: true,
     autoplaySpeed: 5000,
     arrows: false,
-  });  
+  });
 
   // AjaxでSTATIC FORMSにデータを送信
   $('#submit').on('click', function (event) {
@@ -30,7 +30,32 @@ $(function () {
   
     // 入力チェックをした結果、エラーがあるかないか判定
     let result = inputCheck();
+
+     // エラー判定とメッセージを取得
+     let error = result.error;
+     let message = result.message;
+
+     // エラーが無かったらフォームを送信する
+     if (error == false) {
+      $.ajax({
+        url: 'https://api.staticforms.xyz/submit',
+        type: 'POST',
+        dataType: 'json',
+        data: $('#form').serialize(),
+        success: function (result) {
+          alert('お問い合わせを送信しました。')
+        },
+        error: function (xhr, resp, text) {
+          alert('お問い合わせを送信できませんでした。')
+        }
+      })
+    } else {
+      // エラーメッセージを表示する
+      alert(message);
+    }
   });
+
+  
 
   // フォーカスが外れたとき（blur）にフォームの入力チェックをする
   $('#name').blur(function () {
@@ -54,8 +79,7 @@ $(function () {
 
    // お問い合わせフォームの入力チェック
    function inputCheck() {
-         console.log('inputCheck関数の呼び出し');
-
+       
          // エラーのチェック結果
      let result;
  
@@ -132,6 +156,16 @@ $(function () {
     } else {
       $('#submit').attr('src', 'images/button-submit-blue.png');
     }
+
+    // オブジェクトでエラー判定とメッセージを返す
+    result = {
+      error: error,
+      message: message
+    }
+
+    // 戻り値としてエラーがあるかどうかを返す
+    return result;
    }   
+
  });
 
