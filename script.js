@@ -53,9 +53,7 @@ $(function () {
       // エラーメッセージを表示する
       alert(message);
     }
-  });
-
-  
+  });  
 
   // フォーカスが外れたとき（blur）にフォームの入力チェックをする
   $('#name').blur(function () {
